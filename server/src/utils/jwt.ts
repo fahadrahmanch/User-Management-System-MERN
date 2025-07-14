@@ -2,7 +2,7 @@ import jwt, { SignOptions } from 'jsonwebtoken';
 
 const accessSecret = process.env.ACCESS_SECRET;
 const refreshSecret = process.env.REFRESH_SECRET;
-const accessExpiry = process.env.ACCESS_EXPIRY || '15m';
+const accessExpiry = process.env.ACCESS_EXPIRY || '1h';
 const refreshExpiry = process.env.REFRESH_EXPIRY || '7d';
 export const generateTokens=(userId:any)=>{
     if (!accessSecret || !refreshSecret) {
@@ -17,5 +17,7 @@ export const generateTokens=(userId:any)=>{
         {id:userId},refreshSecret as jwt.Secret,
         {expiresIn:refreshExpiry}as SignOptions
     )
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken };   
 }
+
+

@@ -9,7 +9,6 @@ class LoginUser {
     }
    async findUser(email:string,password:string):Promise<any>{
         const user=await this.UserRepository.findByEmail(email)
-        console.log(user)
         if (!user) {
             throw new Error("No account found with the provided email address.")
         }

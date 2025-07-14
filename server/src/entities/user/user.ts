@@ -4,10 +4,12 @@ export class userEntity{
     public name:string;
     public email:string;
     public password:string;
-    constructor({name,email,password}:{name:string,email:string,password:string}){
+    public imageUrl:string;
+    constructor({name,email,password,imageUrl=''}:{name:string,email:string,password:string,imageUrl?:string}){
         this.name=name
         this.email=email
         this.password=password
+        this.imageUrl=imageUrl
     }
 
    async hashPassword():Promise<void>{

@@ -1,13 +1,17 @@
 import LoginImage from '../../assets/young-girl-showing-like-sign-studio.jpg'
 import React, { useEffect, useRef, useState } from 'react'
 import {validationForm} from '../../validationForm/validation'
-import axios from 'axios'
+import API from '../../api/axios'
+import { useNavigate } from 'react-router-dom'
+import { toast } from "react-toastify";
+
 const SignUp:React.FC=()=>{
     const [move,setMove]=useState(true)
     const [values,setValues]=useState({name:'',email:'',password:'',confirmPassword:''})
     const [error,setError]=useState<any>({})
     const divRef=useRef<HTMLDivElement>(null)
     const [height ,setHeight]=useState(0)
+    const navigate=useNavigate()
     const handleChange=(e:any)=>{
        setValues({...values,[e.target.name]:e.target.value})
     }
@@ -19,7 +23,7 @@ const SignUp:React.FC=()=>{
        if(Object.keys(validationErrors).length>0){
            return
        }
-       axios.post('http://localhost:3000/user/signup',{
+       await API.post('/user/signup',{
            name:values.name,
            email:values.email,
            password:values.password
@@ -29,11 +33,12 @@ const SignUp:React.FC=()=>{
            }
        }
    )
-       .then((res)=>{
-           console.log(res)
+       .then(()=>{
+        toast.success("Sign up successfull")
+        navigate('/user/login')
        })
        .catch((err)=>{
-           console.log(err)
+        toast.error(err.response?.data?.message||"something went wrong");
        })
        
     }
@@ -59,17 +64,18 @@ const SignUp:React.FC=()=>{
       ? 'border border-red-500' 
       : 'border border-gray-300 focus:ring-2 focus:ring-[#599ac5]'}`}/><br/>
                 <p className="text-red-500 text-sm font-medium">{error.email?error.email:''}</p>
-                <input onChange={handleChange} value={values.password} placeholder="Password" name='password' className={`w-full p-3 rounded outline-none 
+                <input onChange={handleChange} value={values.password} placeholder="Password" name='password' type='password' className={`w-full p-3 rounded outline-none 
     ${error.password 
       ? 'border border-red-500' 
       : 'border border-gray-300 focus:ring-2 focus:ring-[#599ac5]'}`} /><br/>
                 <p className="text-red-500 text-sm font-medium">{error.password?error.password:''}</p>
-                <input onChange={handleChange} value={values.confirmPassword} placeholder="Confirm Password" name='confirmPassword' className={`w-full p-3 rounded outline-none 
+                <input onChange={handleChange} value={values.confirmPassword} placeholder="Confirm Password" type='password' name='confirmPassword' className={`w-full p-3 rounded outline-none 
     ${error.confirmPassword 
       ? 'border border-red-500' 
       : 'border border-gray-300 focus:ring-2 focus:ring-[#599ac5]'}`}/><br/>
                 <p className="text-red-500 text-sm font-medium">{error.confirmPassword?error.confirmPassword:''}</p>
                 <button className='w-full bg-[#599ac5] text-white p-3 rounded button-confirm transition' onClick={handleSubmit}>Confirm </button>
+                <p  onClick={() => navigate('/user/login')}>Already have an account</p>
             </form>
          </div>
     </div>
